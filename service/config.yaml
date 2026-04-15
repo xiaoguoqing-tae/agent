@@ -1,0 +1,32 @@
+#=======应用========
+app_name: chain
+secret_key: good_luck
+algorithm: HS256
+access_token_expire_minutes: 111130
+prompt_dir: prompts
+log:
+  dir: data/log
+  level: info
+  formatter: '%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
+
+#=======数据库=======
+db:
+  dir: data/db
+#======大语言模型=====
+chat:
+  model: qwen3-max
+  api_key: 你的百炼key
+
+embedding:
+  model: text-embedding-v4
+  dashscope_api_key: 你的百炼key
+
+#======RAG===========
+rag:
+  collection_name: chroma
+  persist_dir: data/chroma
+  chunk_size: 500
+  chunk_overlap: 50
+  k: 5
+  separators: ["\n\n","。",".","?","？","!"," ",""]
+  allow_file_type: ['.txt','.pdf']
