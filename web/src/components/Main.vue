@@ -260,7 +260,7 @@ const handleLogout = () => {
 /* --- 侧边栏设计 --- */
 .aside {
   /* 核心修改：恢复原来的渐变色背景 */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   display: flex;
   flex-direction: column;
   padding: 12px;
@@ -290,7 +290,7 @@ const handleLogout = () => {
 .new-chat-btn {
   width: 100%;
   background-color: #fff;
-  color: #764ba2; /* 按钮文字颜色改为紫色系 */
+  color: #1d4ed8; /* 按钮文字颜色改为紫色系 */
   border: none;
   border-radius: 8px;
   height: 40px;

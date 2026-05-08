@@ -7,10 +7,10 @@ from core.model import chat_model
 from utils.file import load_text,get_abs_path
 from typing import AsyncGenerator, Optional,List
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
-from agent.tools import search_document_tool,search_tool,calculator_tool
+from agent.tools import search_document_tool,search_tool,calculator_tool,generate_image
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, BaseMessage
 from typing import AsyncGenerator, Optional, List, Dict, Any
-tools = [search_document_tool,search_tool,calculator_tool]
+tools = [search_document_tool,search_tool,calculator_tool,generate_image]
 class ChatAgentService:
     """
     Agent 服务类

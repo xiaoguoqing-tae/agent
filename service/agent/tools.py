@@ -2,6 +2,9 @@ import os
 
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
+import dashscope
+from dashscope import ImageSynthesis
+from core.config import conf
 
 from rag.rag_service import RagService
 # 定义工具 (Tools)
@@ -48,3 +51,19 @@ def search_document_tool(query: str,config:RunnableConfig) -> str:
         #return  "\n---\n".join(docs)
     except Exception as e:
         return f"搜索工具执行出错：{str(e)}"
+
+@tool
+def generate_image(prompt: str) -> str:
+    """根据文本提示词生成图片，返回图片 URL。支持中文/英文描述。"""
+    dashscope.api_key = conf['chat']['api_key']
+    rsp = ImageSynthesis.call(
+        model="wanx-v1",
+        prompt=prompt,
+        n=1,
+        size="1024*1024"
+    )
+    if rsp.status_code == 200:
+        return rsp.output.results[0].url
+    return f"生成失败: {rsp.message}"
+
+

@@ -85,7 +85,12 @@ async def login(request:dict[str,Any]):
             expires_delta=access_token_expire
         )
 
-        return {"status":"success","message":"登录成功。","data":{"token": access_token, "token_type": "bearer", "username": user['username'],"role": user["role"]}}
+        return {
+            "status":"success",
+            "message":"登录成功。",
+            "data":{"token": access_token, "token_type": "bearer", "username": user['username'],
+            "role": user["role"]}
+        }
     except Exception as e:
         return {"status": "error", "message": f"登录失败，{str(e)}", "data": {}}
 

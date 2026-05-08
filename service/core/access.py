@@ -1,9 +1,8 @@
 """鉴权、身份验证、密码生成等"""
 from datetime import timedelta,datetime,timezone
-from typing import Optional
+from typing import Optional #可以是原本类型也可以是None，就是可为空
 from jose import JWTError, jwt
-from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from fastapi import HTTPException, Depends, status
 from core.data import get_user
 from core.config import conf
@@ -14,6 +13,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = conf["access_token_expire_minutes"]
 
 # --- 安全工具 ---
 
+#自动拿到token，可以直接用
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -31,6 +31,7 @@ def create_access_token(data:dict, expires_delta:Optional[timedelta] = None):
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     """验证token"""
+    # 手动抛出异常
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="认证失败，请重新登录",

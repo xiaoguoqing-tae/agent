@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+﻿import {ref} from 'vue'
 
 export function request() {
     const baseURL = 'http://localhost:8000'
@@ -36,11 +36,11 @@ export function request() {
 
             while (true) {
                 const { done, value } = await reader.read();
-                
                 // 如果流结束，跳出循环
                 if (done) break;
 
                 buffer+=decoder.decode(value,{stream:true})
+                console.log(buffer)
 
                 // SSE 格式用 \n\n 分隔多条消息，这里分割处理
                 const chunks = buffer.split('\n\n')

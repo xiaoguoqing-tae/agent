@@ -140,7 +140,7 @@ const handleLogin = async () => {
 }
 .login-banner {
   flex: 0 0 55%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +165,7 @@ const handleLogin = async () => {
 .login-form { margin-bottom: 0; }
 .login-btn {
   width: 100%; height: 44px; font-size: 16px; font-weight: 500;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
 }
 @media (max-width: 768px) { .login-banner { display: none; } }

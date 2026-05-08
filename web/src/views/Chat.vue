@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="chat-page" @wheel="handleWheel">
     <!-- 消息列表区域 -->
     <div class="message-list" ref="messageListRef">
@@ -16,15 +16,8 @@
           <!-- human -->
           <template v-if="msg.role === 'human'">
             <div class="content-wrapper human">
-              <div class="sender-name">你</div>
               <div class="message-content" v-html="msg.content"></div>
             </div>
-            <div class="avatar-wrapper human">
-              <div class="avatar human">
-                <el-icon size="20"><User /></el-icon>
-              </div>
-            </div>            
-
           </template>
           
           <!-- AI -->
@@ -104,7 +97,7 @@
                     <div v-for="doc in docList" :key="doc.id" class="doc-item">
                       <el-checkbox :value="doc.id" size="large">
                         <div class="doc-info">
-                          <el-icon size="18" color="#667eea"><Document /></el-icon>
+                          <el-icon size="18" color="#3b82f6"><Document /></el-icon>
                           <div class="doc-text">
                             <div class="doc-name">{{ doc.name }}</div>
                             <div class="doc-size">{{ doc.size }}</div>
@@ -491,7 +484,7 @@ const sendMessage = async () => {
   color: #fff; 
 }
 .avatar.ai { 
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
 }
 .avatar.human { 
   background-color: #dcdfe6; 
@@ -530,7 +523,7 @@ const sendMessage = async () => {
 /* 用户消息气泡样式 - 宽度随内容自适应 */
 .message-item.human .content-wrapper {
   text-align: left;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
   padding: 12px 16px;
   border-radius: 18px;
@@ -541,15 +534,7 @@ const sendMessage = async () => {
   margin-right: 12px; /* 与头像的间距 */
 }
 .message-item.human .content-wrapper::before {
-  content: '';
-  position: absolute;
-  right: -8px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 8px solid #667eea;
+  display: none;
 }
 .message-item.human .sender-name{
   color: white !important;
@@ -584,7 +569,7 @@ const sendMessage = async () => {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .scroll-to-bottom .el-icon {
-  color: #667eea;
+  color: #3b82f6;
   font-size: 18px;
 }
 
@@ -612,7 +597,7 @@ const sendMessage = async () => {
 
 .input-box:focus-within {
   background: #fff;
-  border: 1px solid #667eea;
+  border: 1px solid #3b82f6;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
@@ -652,12 +637,12 @@ const sendMessage = async () => {
 
 .tool-btn:hover { 
   background-color: #f0f2f5; 
-  color: #667eea; 
+  color: #3b82f6; 
 }
 
 /* 核心修改：选中状态样式 - 给文档按钮加紫色背景和白色文字 */
 .tool-btn.has-selected {
-  background-color: #667eea;
+  background-color: #3b82f6;
   color: #fff;
 }
 .tool-btn.has-selected:hover {
@@ -666,7 +651,7 @@ const sendMessage = async () => {
 }
 
 .send-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
   border-radius: 8px;
   padding: 8px 20px;

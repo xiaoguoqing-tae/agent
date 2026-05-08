@@ -95,7 +95,7 @@ const handleSendCode = async () => {
 
 .forgot-banner {
   flex: 0 0 55%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,7 +156,7 @@ const handleSendCode = async () => {
   height: 44px;
   font-size: 16px;
   font-weight: 500;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
   transition: all 0.3s ease;
 }
