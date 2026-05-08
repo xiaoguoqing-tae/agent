@@ -1,6 +1,6 @@
 # 大模型应用开发练习
  - 这是我学习完大模型 RAG与Agent之后的一个练习项目 chain，希望对刚学习的朋友有一点帮助
- - 本项目是前后端分离项目，后台使用 Python+FastAPI+Langchain1.x+Sqlite3 ，前端使用 Vue3+element-plus（Vue3也是刚学的）
+ - 本项目是前后端分离项目，后台使用 Python+FastAPI+Langchain1.x+Sqlite3 ，前端使用 Vue3+element-plus
  - 有几个功能没实现，我觉得太常规，所以就省略了（如：忘记密码、密码重置、权限细分）
 # 后台版本与依赖
 - Python 3.10+
