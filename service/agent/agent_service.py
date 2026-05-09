@@ -48,9 +48,15 @@ class ChatAgentService:
                 system_prompt=prompt
             )
 
-            # 2. 准备输入
-            #inputs = {"messages":{"role":"user","content":query}}
-            inputs = {"messages": [("user", query)]}
+            # 2. 准备输入。选中文档时，显式要求 Agent 先调用文档检索工具。
+            user_query = query
+            if doc_ids:
+                user_query = (
+                    "用户已选择参考文档。请先调用 search_document_tool 检索所选文档，"
+                    "再基于检索结果回答；如果文档没有相关内容，请明确说明。\n\n"
+                    f"用户问题：{query}"
+                )
+            inputs = {"messages": [("user", user_query)]}
 
             # 3. 【核心】配置线程 ID
             # LangGraph 会根据这个 ID 去数据库读取对应的历史记忆

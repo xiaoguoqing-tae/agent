@@ -13,6 +13,16 @@ log:
 db:
   dir: data/db
 
+#======Redis=========
+redis:
+  enabled: false
+  host: 127.0.0.1
+  port: 6379
+  db: 0
+  password: ""
+  socket_timeout: 2
+  socket_connect_timeout: 2
+
 #======大语言模型=====
 chat:
   model: qwen3-max
@@ -21,6 +31,10 @@ chat:
 embedding:
   model: text-embedding-v4
   dashscope_api_key: sk-your-key
+
+#======天气查询======
+weather:
+  api_key: your-amap-web-service-key
 
 #======RAG===========
 rag:

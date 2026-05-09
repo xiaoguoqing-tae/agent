@@ -1,4 +1,4 @@
-import hashlib
+﻿import hashlib
 from os.path import exists
 
 from utils.hash import get_password_hash
@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from fastapi.responses import StreamingResponse
 from core.data import get_user
-from core.access import create_access_token,get_current_user
+from core.access import create_access_token,get_current_user,oauth2_scheme,revoke_token_by_jwt
 from core.database import get_conn
 from core.model import chat_model
 from utils.hash import verify_password
@@ -93,6 +93,18 @@ async def login(request:dict[str,Any]):
         }
     except Exception as e:
         return {"status": "error", "message": f"登录失败，{str(e)}", "data": {}}
+
+@app.post("/logout")
+async def logout(
+    token: str = Depends(oauth2_scheme),
+    current_user: dict = Depends(get_current_user)
+):
+    """退出登录：将当前 token 加入 Redis 黑名单"""
+    try:
+        revoke_token_by_jwt(token)
+        return {"status": "success", "message": "退出登录成功。", "data": {}}
+    except Exception as e:
+        return {"status": "error", "message": f"退出登录失败：{str(e)}", "data": {}}
 
 #=============================== chat =======================
 @app.post("/chat")
