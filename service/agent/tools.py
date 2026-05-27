@@ -24,7 +24,7 @@ def _http_get_json(url: str, params: dict) -> dict:
 def _extract_city(query: str) -> str:
     city = query.strip()
     city = re.sub(
-        r"(今天|明天|后天|当前|现在|查询|查一下|帮我|请问|高德|天气|气温|温度|湿度|怎么样|如何|多少|的|[?？!！。,.，])",
+        r"(今天|明天|后天|当前|现在|查询|查一下|帮我|请问|高德|天气|气温|温度|湿度|怎么样|如何|多少|的|[？?！!。,.，])",
         "",
         city,
     )
@@ -44,7 +44,7 @@ def _amap_weather(query: str) -> str:
     if geo.get("status") != "1":
         return f"高德天气查询失败：{geo.get('info', '未知错误')}"
     if not geo.get("geocodes"):
-        return f"高德天气查询失败：无法识别城市{city}"
+        return f"高德天气查询失败：无法识别城市 {city}"
 
     adcode = geo["geocodes"][0].get("adcode")
     weather = _http_get_json(
@@ -56,7 +56,7 @@ def _amap_weather(query: str) -> str:
 
     lives = weather.get("lives") or []
     if not lives:
-        return f"高德天气查询失败：未查询到{city}天气"
+        return f"高德天气查询失败：未查询到 {city} 天气"
 
     live = lives[0]
     return f"天气{live.get('weather')}，温度{live.get('temperature')}℃，湿度{live.get('humidity')}%"
@@ -84,20 +84,35 @@ def calculator_tool(expression: str) -> float:
 def search_document_tool(query: str, config: RunnableConfig) -> str:
     """
     检索用户当前选中的参考文档。
+
+    当用户选择了参考文档，并提出与文档内容相关的问题时，必须调用本工具。
     doc_ids 不通过参数传递，而是通过 RunnableConfig 的 configurable.doc_ids 传递。
     """
     metadata = config.get("configurable", {})
     doc_ids = metadata.get("doc_ids", [])
 
     if not doc_ids:
-        return "用户未选中任何文档，请根据通用知识回答。"
+        return "用户未选择任何参考文档，请根据通用知识回答。"
 
     try:
         vector = RagService()
-        docs = vector.search(doc_ids, query)
+        docs = vector.retrieve(doc_ids, query)
         if not docs:
-            return "未找到相关文档。"
-        return docs
+            return "在提供的文档中未找到相关信息。"
+
+        parts = ["检索到以下参考资料："]
+        for index, doc in enumerate(docs, start=1):
+            source = doc.metadata.get("source", "未知来源")
+            page = doc.metadata.get("page")
+            page_text = f"第 {page + 1} 页" if isinstance(page, int) else None
+            header = f"[{index}] 来源：{source}"
+            if page_text:
+                header += f"，{page_text}"
+            parts.append(header)
+            parts.append(f"内容：{doc.page_content}")
+            parts.append("")
+
+        return "\n".join(parts).strip()
     except Exception as e:
         return f"搜索工具执行出错：{str(e)}"
 

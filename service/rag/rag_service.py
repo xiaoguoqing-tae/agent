@@ -35,6 +35,7 @@ class RagService:
         self.spliter = RecursiveCharacterTextSplitter(
             chunk_size=conf["rag"]["chunk_size"],
             chunk_overlap=conf["rag"]["chunk_overlap"],
+            separators=conf["rag"]["separators"],
             length_function=len,
         )
 
@@ -152,6 +153,11 @@ class RagService:
             context += f"来源：{doc.metadata['source']}\n内容：{doc.page_content}"
 
         return chain.invoke({"input": query, "context": context})
+
+    def retrieve(self, doc_ids: list[int], query: str):
+        """只执行检索，返回原始文档片段。"""
+        retriever = self.get_retriever(doc_ids)
+        return retriever.invoke(query)
 
     def remove(self, doc_id: int):
         self.vector.delete(where={"doc_id": doc_id})
