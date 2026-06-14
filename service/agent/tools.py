@@ -101,16 +101,30 @@ def search_document_tool(query: str, config: RunnableConfig) -> str:
             return "在提供的文档中未找到相关信息。"
 
         parts = ["检索到以下参考资料："]
+        total = 0
+        max_chars = conf["rag"].get("max_context_chars", 6000)
         for index, doc in enumerate(docs, start=1):
             source = doc.metadata.get("source", "未知来源")
             page = doc.metadata.get("page")
-            page_text = f"第 {page + 1} 页" if isinstance(page, int) else None
+            chunk_index = doc.metadata.get("chunk_index")
+            distance = doc.metadata.get("distance")
+            page_text = f"第 {page + 1} 页" if isinstance(page, int) and page >= 0 else None
             header = f"[{index}] 来源：{source}"
             if page_text:
                 header += f"，{page_text}"
-            parts.append(header)
-            parts.append(f"内容：{doc.page_content}")
+            if isinstance(chunk_index, int):
+                header += f"，chunk={chunk_index}"
+            if distance is not None:
+                header += f"，distance={distance}"
+
+            block = f"{header}\n内容：{doc.page_content}"
+            block_len = len(block)
+            if index > 1 and total + block_len > max_chars:
+                parts.append("...（参考资料过长，已截断）")
+                break
+            parts.append(block)
             parts.append("")
+            total += block_len
 
         return "\n".join(parts).strip()
     except Exception as e:

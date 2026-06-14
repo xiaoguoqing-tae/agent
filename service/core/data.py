@@ -21,7 +21,7 @@ def get_departments_name(id):
 def get_auth_departments(user_id):
     """获取授权部门"""
     conn = get_conn()
-    res = conn.execute("""SELECT * FROM depts WHERE id IN(SELECT department_id FROM user_department WHERE user_id=?)""",(user_id,)).fetchall()
+    res = conn.execute("""SELECT * FROM depts WHERE id IN(SELECT dept_id FROM user_dept WHERE user_id=?)""",(user_id,)).fetchall()
     conn.close()
     if res is None:
         return []

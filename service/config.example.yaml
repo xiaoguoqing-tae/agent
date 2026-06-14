@@ -11,7 +11,16 @@ log:
 
 #=======数据库======
 db:
-  dir: data/db
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: your-mysql-password
+  database: chain
+  charset: utf8mb4
+  # 也可以直接配置完整连接串；配置后会优先使用 url。
+  # url: mysql+pymysql://root:your-mysql-password@127.0.0.1:3306/chain?charset=utf8mb4
+  # LangGraph checkpoint 是异步保存器；不配置时会自动把 mysql+pymysql 转成 mysql+aiomysql。
+  # checkpoint_url: mysql+aiomysql://root:your-mysql-password@127.0.0.1:3306/chain?charset=utf8mb4
 
 #======Redis=========
 redis:
@@ -43,5 +52,8 @@ rag:
   chunk_size: 500
   chunk_overlap: 50
   k: 5
+  max_distance:
+  max_context_chars: 6000
+  rerank_candidates: 5
   separators: ["\n\n", "。", ".", "?", "，", "!", " ", ""]
   allow_file_type: ['.txt', '.pdf']

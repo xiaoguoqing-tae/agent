@@ -4,7 +4,14 @@ from typing import Any, AsyncGenerator, Dict, List, Optional
 
 from langchain.agents import create_agent
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
-from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
+
+try:
+    from langgraph.checkpoint.mysql.aio import AsyncMySqlSaver as AsyncMySQLSaver
+except ImportError:
+    try:
+        from langgraph.checkpoint.mysql.aio import AsyncMySQLSaver
+    except ImportError:
+        from langgraph.checkpoint.mysql.aio import AIOMySQLSaver as AsyncMySQLSaver
 
 from agent.tools import calculator_tool, generate_image, search_document_tool, search_tool
 from core.config import conf
@@ -20,7 +27,13 @@ class ChatAgentService:
     """Agent 服务，支持通过 thread_id 区分不同对话上下文。"""
 
     def __init__(self):
-        self.db_path = get_chat()
+        self.db_url = get_chat()
+
+    async def _setup_saver(self, saver):
+        setup = getattr(saver, "setup", None)
+        if setup:
+            await setup()
+        return saver
 
     async def stream_chat(
         self,
@@ -33,7 +46,8 @@ class ChatAgentService:
         if doc_ids:
             prompt = load_text(os.path.join(get_abs_path(conf["prompt_dir"]), "chat_agent_2.txt"))
 
-        async with AsyncSqliteSaver.from_conn_string(self.db_path) as saver:
+        async with AsyncMySQLSaver.from_conn_string(self.db_url) as saver:
+            saver = await self._setup_saver(saver)
             agent = create_agent(
                 model=chat_model,
                 tools=tools,
@@ -75,7 +89,8 @@ class ChatAgentService:
 
     async def get_history(self, thread_id: str) -> List[Dict[str, Any]]:
         """获取指定对话的历史消息。"""
-        async with AsyncSqliteSaver.from_conn_string(self.db_path) as saver:
+        async with AsyncMySQLSaver.from_conn_string(self.db_url) as saver:
+            saver = await self._setup_saver(saver)
             config = {"configurable": {"thread_id": thread_id}}
             checkpoint = await saver.aget(config)
 
@@ -109,7 +124,8 @@ class ChatAgentService:
 
     async def clear_history(self, thread_id: str):
         try:
-            async with AsyncSqliteSaver.from_conn_string(self.db_path) as saver:
+            async with AsyncMySQLSaver.from_conn_string(self.db_url) as saver:
+                saver = await self._setup_saver(saver)
                 await saver.adelete_thread(thread_id)
         except Exception as e:
             raise e
